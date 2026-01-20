@@ -4,6 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import Icon from "@/components/ui/icon";
 import { useState } from "react";
+import { Link } from "react-router-dom";
 
 const Index = () => {
   const [formData, setFormData] = useState({
@@ -123,7 +124,8 @@ const Index = () => {
                   "Пожарная сигнализация, пожаротушение, СОУЭ",
                   "Системы охраны, видеонаблюдения, СКУД",
                   "Электроснабжение и слаботочные сети"
-                ]
+                ],
+                link: "/projecting"
               },
               {
                 icon: "FileCheck",
@@ -150,24 +152,37 @@ const Index = () => {
                   "Гарантия на работы — 1 год"
                 ]
               }
-            ].map((service, index) => (
-              <Card key={index} className="border-2 border-border hover:border-accent transition-colors">
-                <CardContent className="p-8">
-                  <div className="w-14 h-14 bg-accent rounded-lg flex items-center justify-center mb-4">
-                    <Icon name={service.icon} size={28} className="text-accent-foreground" />
-                  </div>
-                  <h3 className="font-bold text-xl mb-4">{service.title}</h3>
-                  <ul className="space-y-2">
-                    {service.items.map((item, i) => (
-                      <li key={i} className="flex items-start gap-2">
-                        <Icon name="Check" size={20} className="text-accent mt-0.5 flex-shrink-0" />
-                        <span className="text-muted-foreground">{item}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </CardContent>
-              </Card>
-            ))}
+            ].map((service, index) => {
+              const CardWrapper = service.link ? Link : 'div';
+              const cardProps = service.link ? { to: service.link } : {};
+              
+              return (
+                <CardWrapper key={index} {...cardProps} className={service.link ? "block" : ""}>
+                  <Card className="border-2 border-border hover:border-accent transition-colors h-full">
+                    <CardContent className="p-8">
+                      <div className="w-14 h-14 bg-accent rounded-lg flex items-center justify-center mb-4">
+                        <Icon name={service.icon} size={28} className="text-accent-foreground" />
+                      </div>
+                      <h3 className="font-bold text-xl mb-4">{service.title}</h3>
+                      <ul className="space-y-2 mb-4">
+                        {service.items.map((item, i) => (
+                          <li key={i} className="flex items-start gap-2">
+                            <Icon name="Check" size={20} className="text-accent mt-0.5 flex-shrink-0" />
+                            <span className="text-muted-foreground">{item}</span>
+                          </li>
+                        ))}
+                      </ul>
+                      {service.link && (
+                        <div className="flex items-center gap-2 text-accent font-medium mt-4">
+                          <span>Подробнее</span>
+                          <Icon name="ArrowRight" size={18} />
+                        </div>
+                      )}
+                    </CardContent>
+                  </Card>
+                </CardWrapper>
+              );
+            })}
           </div>
         </div>
       </section>
